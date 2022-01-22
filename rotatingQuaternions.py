@@ -75,6 +75,13 @@ def changeAngleMatrixToRotationMatrix(angleMatrix, printMatrix):
             print(row)
     return matrix
 
+def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
+
+
+    if printQuaternion:
+        print("\Rotation matrix " + str(rotationMatrix) + " transforms into quaternion " + str(quaternion))
+    return quaternion
+
 def rotateQuaternion(quaternionToRotate, angleRotationMatrix):
 
     translationMatrix = changeAngleMatrixToRotationMatrix(angleRotationMatrix, False)
