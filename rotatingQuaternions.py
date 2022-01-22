@@ -15,6 +15,36 @@ def printMatrix(matrix):
     for row in matrix:
         print(row)
 
+def changeQuaternionToRotationMatrix(quaternion, printMatrix):
+    if len(quaternion) != 4:
+        print("Invalid quaternion length. Quaternion consists of 4 elements, " + str(len(quaternion)) + " given for quaternion " + str(quaternion) + ".")
+        sys.exit()
+    q0 = quaternion[0]
+    q1 = quaternion[1]
+    q2 = quaternion[2]
+    q3 = quaternion[3]
+
+    r11 = round(q0**2 + q1**2 - q2**2 - q3**3, 15)
+    r12 = round(2*(q1*q2 - q0*q3), 15)
+    r13 = round(2*(q0*q2 + q1*q3), 15)
+
+    r21 = round(2*(q0*q3 + q1*q2), 15)
+    r22 = round(q0**2 - q1**2 + q2**2 - q3**3, 15)
+    r23 = round(2*(q2*q3 - q0*q1), 15)
+
+    r31 = round(2*(q1*q3 - q0*q2), 15)
+    r32 = round(2*(q0*q1 + q2*q3), 15)
+    r33 = round(q0**2 - q1**2 - q2**2 + q3**3, 15)
+
+    matrix = [[r11, r12, r13], 
+              [r21, r22, r23], 
+              [r31, r32, r33]]
+    if printMatrix:
+        print("Quaternion " + str(quaternion) + " transforms into rotation matrix:")
+        for row in matrix:
+            print(row)
+    return matrix
+
 def rotateQuaternion(quaternion, rotation):
     alpha = math.radians(rotationMatrix[0])
     beta  = math.radians(rotationMatrix[1])
@@ -45,5 +75,6 @@ def rotateQuaternion(quaternion, rotation):
     print("Quaternion after rotation with given " + str(rotation) + " rotation matrix equal to " + str(newQuaternion))
 
 if __name__ == '__main__':
+    changeQuaternionToRotationMatrix([math.sqrt(2)/2, math.sqrt(2)/2, 0, 0], True)
     checkQuaternionSquareSum(quaternionToRotate)
     rotateQuaternion(quaternionToRotate, rotationMatrix)
