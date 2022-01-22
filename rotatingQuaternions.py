@@ -11,7 +11,7 @@ def checkQuaternionSquareSum(quaternion):
         print("Square sum equals " + str(squareSum))
         sys.exit()
 
-def printMatrix(matrix):
+def printMatrixMethod(matrix):
     for row in matrix:
         print(row)
 
@@ -41,8 +41,7 @@ def changeQuaternionToRotationMatrix(quaternion, printMatrix):
               [r31, r32, r33]]
     if printMatrix:
         print("\nQuaternion " + str(quaternion) + " transforms into rotation matrix:")
-        for row in matrix:
-            print(row)
+        printMatrixMethod(matrix)
     return matrix
 
 def changeAngleMatrixToRotationMatrix(angleMatrix, printMatrix):
@@ -71,23 +70,15 @@ def changeAngleMatrixToRotationMatrix(angleMatrix, printMatrix):
 
     if printMatrix:
         print("\nAngle matrix " + str(angleMatrix) + " transforms into rotation matrix:")
-        for row in matrix:
-            print(row)
+        printMatrixMethod(matrix)
     return matrix
-
-def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
-
-
-    if printQuaternion:
-        print("\Rotation matrix " + str(rotationMatrix) + " transforms into quaternion " + str(quaternion))
-    return quaternion
 
 def rotateQuaternion(quaternionToRotate, angleRotationMatrix):
 
     translationMatrix = changeAngleMatrixToRotationMatrix(angleRotationMatrix, False)
 
     print("\nMatrix generated with given " + str(angleRotationMatrix) + " rotation matrix:")
-    printMatrix(translationMatrix)
+    printMatrixMethod(translationMatrix)
     # q0 = 1/2*math.sqrt(1 + r11 + r22 + r33)
     # q1 = 1/(4*q0)*(r32 - r23)
     # q2 = 1/(4*q0)*(r13 - r31)
