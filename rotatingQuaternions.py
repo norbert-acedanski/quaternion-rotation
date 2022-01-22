@@ -7,7 +7,7 @@ def checkQuaternionSquareSum(quaternion):
     squareSum = math.sqrt(quaternion[0]**2 + quaternion[1]**2 + quaternion[2]**2 + quaternion[3]**2)
     precision = 1.e-9
     if abs(squareSum - 1) > precision:
-        print("Invalid quaternion. Square sum of quaternion " + str(quaternion) + " coordinates not equal to 1 with " + str(precision) + " precision.")
+        print("\nInvalid quaternion. Square sum of quaternion " + str(quaternion) + " coordinates not equal to 1 with " + str(precision) + " precision.")
         print("Square sum equals " + str(squareSum))
         sys.exit()
 
@@ -17,7 +17,7 @@ def printMatrixMethod(matrix):
 
 def changeQuaternionToRotationMatrix(quaternion, printMatrix):
     if len(quaternion) != 4:
-        print("Invalid quaternion length. Quaternion consists of 4 elements, " + str(len(quaternion)) + " given for quaternion " + str(quaternion) + ".")
+        print("\nInvalid quaternion length. Quaternion consists of 4 elements, " + str(len(quaternion)) + " given for quaternion " + str(quaternion) + ".")
         sys.exit()
     q0 = quaternion[0]
     q1 = quaternion[1]
@@ -46,7 +46,7 @@ def changeQuaternionToRotationMatrix(quaternion, printMatrix):
 
 def changeAngleMatrixToRotationMatrix(angleMatrix, printMatrix):
     if len(angleMatrix) != 3:
-        print("Invalid angle matrix length. Angle matrix consists of 3 elements, " + str(len(angleMatrix)) + " given for angle matrix " + str(angleMatrix) + ".")
+        print("\nInvalid angle matrix length. Angle matrix consists of 3 elements, " + str(len(angleMatrix)) + " given for angle matrix " + str(angleMatrix) + ".")
         sys.exit()
     alpha = math.radians(angleMatrix[0])
     beta  = math.radians(angleMatrix[1])
@@ -73,21 +73,52 @@ def changeAngleMatrixToRotationMatrix(angleMatrix, printMatrix):
         printMatrixMethod(matrix)
     return matrix
 
+def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
+    if len(rotationMatrix) != 3:
+        print("\nInvalid rotation matrix row number. Rotation matrix consists of 3 rows and 3 columns, " + str(len(rotationMatrix)) + " rows given for rotation matrix:")
+        printMatrixMethod(rotationMatrix)
+        sys.exit()
+    else:
+        for rowNumber, row in enumerate(rotationMatrix):
+            if (len(row) != 3):
+                print("\nInvalid rotation matrix size in row " + str(rowNumber + 1) + ". Rotation matrix consists of 3 rows and 3 columns, but size " + str(len(row)) + " given.")
+                sys.exit()
+    r11 = rotationMatrix[0][0]
+    r12 = rotationMatrix[0][1]
+    r13 = rotationMatrix[0][2]
+
+    r21 = rotationMatrix[1][0]
+    r22 = rotationMatrix[1][1]
+    r23 = rotationMatrix[1][2]
+
+    r31 = rotationMatrix[2][0]
+    r32 = rotationMatrix[2][1]
+    r33 = rotationMatrix[2][2]
+
+    q0 = 1/2*math.sqrt(1 + r11 + r22 + r33)
+    q1 = 1/(4*q0)*(r32 - r23)
+    q2 = 1/(4*q0)*(r13 - r31)
+    q3 = 1/(4*q0)*(r21 - r12)
+    quaternion = [q0, q1, q2, q3]
+
+    if printQuaternion:
+        print("\nRotation matrix:")
+        printMatrixMethod(rotationMatrix)
+        print("transforms into quaterion " + str(quaternion))
+    return quaternion
+
 def rotateQuaternion(quaternionToRotate, angleRotationMatrix):
 
     translationMatrix = changeAngleMatrixToRotationMatrix(angleRotationMatrix, False)
 
     print("\nMatrix generated with given " + str(angleRotationMatrix) + " rotation matrix:")
     printMatrixMethod(translationMatrix)
-    # q0 = 1/2*math.sqrt(1 + r11 + r22 + r33)
-    # q1 = 1/(4*q0)*(r32 - r23)
-    # q2 = 1/(4*q0)*(r13 - r31)
-    # q3 = 1/(4*q0)*(r21 - r12)
-    # newQuaternion = [q0, q1, q2, q3]
+    
     # print("Quaternion after rotation with given " + str(angleRotationMatrix) + " rotation matrix equal to " + str(newQuaternion))
 
 if __name__ == '__main__':
     changeQuaternionToRotationMatrix([math.sqrt(2)/2, math.sqrt(2)/2, 0, 0], True)
-    changeAngleMatrixToRotationMatrix([30, 60, 45], True)
+    matrix = changeAngleMatrixToRotationMatrix([30, 60, 45], True)
+    changeRotationMatrixToQuaternion(matrix, True)
     checkQuaternionSquareSum(quaternionToRotate)
     rotateQuaternion(quaternionToRotate, angleMatrix)
