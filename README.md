@@ -22,5 +22,11 @@ To install all required packages, type "_pip install -r requirements.txt_" in th
 # Usage
 Script comes in handy in robot programming, when you have no other way of rotating a robot target.
 
+# References
+Everything About Unit Quaternions to Express Orientations in Robotics + Great Demos [LESSON 12] - https://www.youtube.com/watch?v=Ek9fySVzuq4
+Conversion between quaternions and Euler angles - https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+Maths - Conversion Matrix to Quaternion - https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
+Converting a Rotation Matrix to a Quaternion - https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
+
 # Licence
 Distributed under the MIT License. See LICENSE file for more information.
