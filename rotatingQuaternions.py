@@ -1,10 +1,7 @@
 import sys
 import math
 import numpy
-# quaternionToRotate = [1, 0, 0, 0]
-quaternionToRotate = [0, 0.980785279, -0.195090328, 0]
-# with given example, program should print [0, 0.831461357, 0.555582588, 0]
-# quaternionToRotate = [0, 0.831469616,  0.555570228, 0]
+quaternionToRotate = [0, 0.980785279, -0.195090328, 0] # with given example, program should print [0, 0.555582588, 0.831461357, 0]
 angleMatrix = [0, 0, 90]
 
 def checkQuaternionSquareSum(quaternion):
