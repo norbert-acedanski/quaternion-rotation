@@ -91,11 +91,32 @@ def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
     r32 = rotationMatrix[2][1]
     r33 = rotationMatrix[2][2]
 
-    q0 = 1/2*math.sqrt(1 + r11 + r22 + r33)
-    q1 = 1/(4*q0)*(r32 - r23)
-    q2 = 1/(4*q0)*(r13 - r31)
-    q3 = 1/(4*q0)*(r21 - r12)
+    if r11 + r22 + r33 > 0:
+        squareRoot = math.sqrt(1 + r11 + r22 + r33)*2
+        q0 = 1/4*squareRoot
+        q1 = (r32 - r23)/squareRoot
+        q2 = (r13 - r31)/squareRoot
+        q3 = (r21 - r12)/squareRoot
+    elif (r11 > r22) and (r11 > r33):
+        squareRoot = math.sqrt(1 + r11 - r22 - r33)*2
+        q0 = (r32 - r23)/squareRoot
+        q1 = 1/4*squareRoot
+        q2 = (r12 + r21)/squareRoot
+        q3 = (r13 + r31)/squareRoot
+    elif r22 > r33:
+        squareRoot = math.sqrt(1 - r11 + r22 - r33)*2
+        q0 = (r13 - r31)/squareRoot
+        q1 = (r12 + r21)/squareRoot
+        q2 = 1/4*squareRoot
+        q3 = (r23 + r32)/squareRoot
+    else:
+        squareRoot = math.sqrt(1 - r11 - r22 + r33)*2
+        q0 = (r21 - r12)/squareRoot
+        q1 = (r13 + r31)/squareRoot
+        q2 = (r23 - r32)/squareRoot
+        q3 = 1/4*squareRoot
     quaternion = [q0, q1, q2, q3]
+    quaternion = [round(q, 15) for q in quaternion]
 
     if printQuaternion:
         print("\nRotation matrix:")
