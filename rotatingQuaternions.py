@@ -1,7 +1,10 @@
 import sys
 import math
 import numpy
+# quaternionToRotate = [1, 0, 0, 0]
 quaternionToRotate = [0, 0.980785279, -0.195090328, 0]
+# with given example, program should print [0, 0.831461357, 0.555582588, 0]
+# quaternionToRotate = [0, 0.831469616,  0.555570228, 0]
 angleMatrix = [0, 0, 90]
 
 def checkQuaternionSquareSum(quaternion):
@@ -70,6 +73,25 @@ def changeAngleMatrixToRotationMatrix(angleMatrix, printMatrix):
         print(matrix)
     return matrix
 
+def multiplyTwo2DMatices(matrix1, matrix2, printProduct):
+    numpyMatrix1 = numpy.array(matrix1)
+    numpyMatrix2 = numpy.array(matrix2)
+    if numpyMatrix1.dtype.char == "O":
+        print("\nInput 1 is not a matrix. Wrong sizes of rows or columns.")
+        sys.exit()
+    if numpyMatrix2.dtype.char == "O":
+        print("\nInput 2 is not a matrix. Wrong sizes of rows or columns.")
+        sys.exit()
+    try:
+        productMatrix = numpy.matmul(numpyMatrix1, numpyMatrix2)
+    except ValueError as e:
+        print("\n" + str(e))
+        sys.exit()
+    if printProduct:
+        print("\nProduct of two given matrices:")
+        print(productMatrix)
+    return productMatrix
+
 def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
     if len(rotationMatrix) != 3:
         print("\nInvalid rotation matrix row number. Rotation matrix consists of 3 rows and 3 columns, " + str(len(rotationMatrix)) + " rows given for rotation matrix:")
@@ -126,17 +148,12 @@ def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
     return quaternion
 
 def rotateQuaternion(quaternionToRotate, angleRotationMatrix):
-
-    translationMatrix = changeAngleMatrixToRotationMatrix(angleRotationMatrix, False)
-
-    print("\nMatrix generated with given " + str(angleRotationMatrix) + " rotation matrix:")
-    printMatrixMethod(translationMatrix)
-    
-    # print("Quaternion after rotation with given " + str(angleRotationMatrix) + " rotation matrix equal to " + str(newQuaternion))
+    rotationMatrix = changeAngleMatrixToRotationMatrix(angleRotationMatrix, False)
+    matrixFromQuaternionToRotate = changeQuaternionToRotationMatrix(quaternionToRotate, False)
+    matrixOfNewQuaternion = multiplyTwo2DMatices(matrixFromQuaternionToRotate, rotationMatrix, False)
+    newQuaternion = changeRotationMatrixToQuaternion(matrixOfNewQuaternion, False)
+    print("\nQuaternion " + str(quaternionToRotate) + " after rotation, with given " + str(angleRotationMatrix) + " angles matrix equal to " + str(newQuaternion))
 
 if __name__ == '__main__':
-    changeQuaternionToRotationMatrix([math.sqrt(2)/2, math.sqrt(2)/2, 0, 0], True)
-    matrix = changeAngleMatrixToRotationMatrix([30, 60, 45], True)
-    changeRotationMatrixToQuaternion(matrix, True)
     checkQuaternionSquareSum(quaternionToRotate)
     rotateQuaternion(quaternionToRotate, angleMatrix)
