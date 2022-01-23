@@ -51,26 +51,22 @@ def changeAngleMatrixToRotationMatrix(angleMatrix, printMatrix):
     alpha = math.radians(angleMatrix[0])
     beta  = math.radians(angleMatrix[1])
     gamma = math.radians(angleMatrix[2])
-
-    r11 = round( math.cos(alpha)*math.cos(beta)*math.cos(gamma) - math.sin(alpha)*math.sin(gamma), 15)
-    r12 = round(-math.cos(alpha)*math.cos(beta)*math.sin(gamma) - math.sin(alpha)*math.cos(gamma), 15)
-    r13 = round( math.cos(alpha)*math.sin(beta), 15)
-
-    r21 = round( math.sin(alpha)*math.cos(beta)*math.cos(gamma) + math.cos(alpha)*math.sin(gamma), 15)
-    r22 = round(-math.sin(alpha)*math.cos(beta)*math.sin(gamma) + math.cos(alpha)*math.cos(gamma), 15)
-    r23 = round( math.sin(alpha)*math.sin(beta), 15)
-
-    r31 = round(-math.sin(beta)*math.cos(gamma), 15)
-    r32 = round( math.sin(beta)*math.sin(gamma), 15)
-    r33 = round( math.cos(beta), 15)
-
-    matrix = [[r11, r12, r13], 
-              [r21, r22, r23], 
-              [r31, r32, r33]]
+    
+    xRotationMatrix = numpy.array([[1,               0,                0],
+                                   [0, math.cos(alpha), -math.sin(alpha)],
+                                   [0, math.sin(alpha),  math.cos(alpha)]])
+    yRotationMatrix = numpy.array([[ math.cos(beta), 0, math.sin(beta)],
+                                   [              0, 1,              0],
+                                   [-math.sin(beta), 0, math.cos(beta)]])
+    zRotationMatrix = numpy.array([[math.cos(gamma), -math.sin(gamma), 0],
+                                   [math.sin(gamma),  math.cos(gamma), 0],
+                                   [              0,                0, 1]])
+    partialMatrix = numpy.matmul(zRotationMatrix, yRotationMatrix)
+    matrix = numpy.matmul(partialMatrix, xRotationMatrix)
 
     if printMatrix:
         print("\nAngle matrix " + str(angleMatrix) + " transforms into rotation matrix:")
-        printMatrixMethod(matrix)
+        print(matrix)
     return matrix
 
 def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
