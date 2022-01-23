@@ -102,44 +102,71 @@ def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
             if (len(row) != 3):
                 print("\nInvalid rotation matrix size in row " + str(rowNumber + 1) + ". Rotation matrix consists of 3 rows and 3 columns, but size " + str(len(row)) + " given.")
                 sys.exit()
-    r11 = rotationMatrix[0][0]
-    r12 = rotationMatrix[0][1]
-    r13 = rotationMatrix[0][2]
+    r11 = round(rotationMatrix[0][0], 15)
+    r12 = round(rotationMatrix[0][1], 15)
+    r13 = round(rotationMatrix[0][2], 15)
 
-    r21 = rotationMatrix[1][0]
-    r22 = rotationMatrix[1][1]
-    r23 = rotationMatrix[1][2]
+    r21 = round(rotationMatrix[1][0], 15)
+    r22 = round(rotationMatrix[1][1], 15)
+    r23 = round(rotationMatrix[1][2], 15)
 
-    r31 = rotationMatrix[2][0]
-    r32 = rotationMatrix[2][1]
-    r33 = rotationMatrix[2][2]
+    r31 = round(rotationMatrix[2][0], 15)
+    r32 = round(rotationMatrix[2][1], 15)
+    r33 = round(rotationMatrix[2][2], 15)
 
-    if r11 + r22 + r33 > 0:
-        squareRoot = math.sqrt(1 + r11 + r22 + r33)*2
-        q0 = 1/4*squareRoot
-        q1 = (r32 - r23)/squareRoot
-        q2 = (r13 - r31)/squareRoot
-        q3 = (r21 - r12)/squareRoot
-    elif (r11 > r22) and (r11 > r33):
-        squareRoot = math.sqrt(1 + r11 - r22 - r33)*2
-        q0 = (r32 - r23)/squareRoot
-        q1 = 1/4*squareRoot
-        q2 = (r12 + r21)/squareRoot
-        q3 = (r13 + r31)/squareRoot
-    elif r22 > r33:
-        squareRoot = math.sqrt(1 - r11 + r22 - r33)*2
-        q0 = (r13 - r31)/squareRoot
-        q1 = (r12 + r21)/squareRoot
-        q2 = 1/4*squareRoot
-        q3 = (r23 + r32)/squareRoot
+    if r33 < 0:
+        if r11 > r22:
+            matrixTrace = 1 + r11 - r22 - r33
+            q0 = r32 - r23
+            q1 = matrixTrace
+            q2 = r12 + r21
+            q3 = r13 + r31
+        else:
+            matrixTrace = 1 - r11 + r22 - r33
+            q0 = r31 - r13
+            q1 = - r12 - r21
+            q2 = matrixTrace
+            q3 = r23 + r32
     else:
-        squareRoot = math.sqrt(1 - r11 - r22 + r33)*2
-        q0 = (r21 - r12)/squareRoot
-        q1 = (r13 + r31)/squareRoot
-        q2 = (r23 - r32)/squareRoot
-        q3 = 1/4*squareRoot
+        if r11 < -r22:
+            matrixTrace = 1 - r11 - r22 + r33
+            q0 = r21 - r12
+            q1 = r13 + r31
+            q2 = r23 + r32
+            q3 = matrixTrace
+        else:
+            matrixTrace = 1 + r11 + r22 + r33
+            q0 = matrixTrace
+            q1 = r32 - r23
+            q2 = r13 - r31
+            q3 = r21 - r12
+
+    # if r11 + r22 + r33 > 0:
+    #     squareRoot = math.sqrt(1 + r11 + r22 + r33)*2
+    #     q0 = 1/4*squareRoot
+    #     q1 = (r32 - r23)/squareRoot
+    #     q2 = (r13 - r31)/squareRoot
+    #     q3 = (r21 - r12)/squareRoot
+    # elif (r11 > r22) and (r11 > r33):
+    #     squareRoot = math.sqrt(1 + r11 - r22 - r33)*2
+    #     q0 = (r32 - r23)/squareRoot
+    #     q1 = 1/4*squareRoot
+    #     q2 = (r12 + r21)/squareRoot
+    #     q3 = (r13 + r31)/squareRoot
+    # elif r22 > r33:
+    #     squareRoot = math.sqrt(1 - r11 + r22 - r33)*2
+    #     q0 = (r13 - r31)/squareRoot
+    #     q1 = (r12 + r21)/squareRoot
+    #     q2 = 1/4*squareRoot
+    #     q3 = (r23 + r32)/squareRoot
+    # else:
+    #     squareRoot = math.sqrt(1 - r11 - r22 + r33)*2
+    #     q0 = (r21 - r12)/squareRoot
+    #     q1 = (r13 + r31)/squareRoot
+    #     q2 = (r23 + r32)/squareRoot
+    #     q3 = 1/4*squareRoot
     quaternion = [q0, q1, q2, q3]
-    quaternion = [round(q, 15) for q in quaternion]
+    quaternion = [round(q*0.5/math.sqrt(matrixTrace), 15) for q in quaternion]
 
     if printQuaternion:
         print("\nRotation matrix:")
@@ -148,6 +175,7 @@ def changeRotationMatrixToQuaternion(rotationMatrix, printQuaternion):
     return quaternion
 
 def rotateQuaternion(quaternionToRotate, angleRotationMatrix):
+    checkQuaternionSquareSum(quaternionToRotate)
     rotationMatrix = changeAngleMatrixToRotationMatrix(angleRotationMatrix, False)
     matrixFromQuaternionToRotate = changeQuaternionToRotationMatrix(quaternionToRotate, False)
     matrixOfNewQuaternion = multiplyTwo2DMatices(matrixFromQuaternionToRotate, rotationMatrix, False)
@@ -155,5 +183,10 @@ def rotateQuaternion(quaternionToRotate, angleRotationMatrix):
     print("\nQuaternion " + str(quaternionToRotate) + " after rotation, with given " + str(angleRotationMatrix) + " angles matrix equal to " + str(newQuaternion))
 
 if __name__ == '__main__':
-    checkQuaternionSquareSum(quaternionToRotate)
-    rotateQuaternion(quaternionToRotate, angleMatrix)
+    for i in range(3):
+        angleMatrix = [0, 0, 0]
+        for j in range(2):
+            angleMatrix[i] = 90*(-1)**j
+            rotateQuaternion(quaternionToRotate, angleMatrix)
+        angleMatrix[i] = 180
+        rotateQuaternion(quaternionToRotate, angleMatrix)
