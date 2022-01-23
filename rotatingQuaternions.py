@@ -184,9 +184,10 @@ def rotateQuaternion(quaternionToRotate, angleRotationMatrix):
 
 if __name__ == '__main__':
     for i in range(3):
-        angleMatrix = [0, 0, 0]
+        angleMatrixForSimpleRorations = [0, 0, 0]
         for j in range(2):
-            angleMatrix[i] = 90*(-1)**j
-            rotateQuaternion(quaternionToRotate, angleMatrix)
-        angleMatrix[i] = 180
-        rotateQuaternion(quaternionToRotate, angleMatrix)
+            angleMatrixForSimpleRorations[i] = 90*(-1)**j
+            rotateQuaternion(quaternionToRotate, angleMatrixForSimpleRorations)
+        angleMatrixForSimpleRorations[i] = 180
+        rotateQuaternion(quaternionToRotate, angleMatrixForSimpleRorations)
+    rotateQuaternion(quaternionToRotate, angleMatrix)
