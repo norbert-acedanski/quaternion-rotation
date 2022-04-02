@@ -14,7 +14,7 @@ All required packages in requirements.txt file.
 To install all required packages, type "_pip install -r requirements.txt_" in the terminal.
 
 ### Working with quaternion-rotation:
-1. At the top of the file, input the quaternion you want to rotate in _quaternionToRotate_ variable.
+1. At the top of the file, input the quaternion you want to rotate in *quaternion_to_rotate* variable.
 2. Input also the angle matrix to _angleMatrix_ variable.
 3. Run the script.
 4. After successful execution, program should print simple rotations and after that, the desired rotation.
