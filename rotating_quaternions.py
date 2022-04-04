@@ -8,9 +8,7 @@ def check_quaternion_square_sum(quaternion):
     square_sum = math.sqrt(quaternion[0]**2 + quaternion[1]**2 + quaternion[2]**2 + quaternion[3]**2)
     precision = 1.e-9
     if abs(square_sum - 1) > precision:
-        print("\nInvalid quaternion. Square sum of quaternion " + str(quaternion) + " coordinates not equal to 1 with " + str(precision) + " precision.")
-        print("Square sum equals " + str(square_sum))
-        sys.exit()
+        raise ValueError("\nInvalid quaternion. Square sum of quaternion " + str(quaternion) + " coordinates not equal to 1 with " + str(precision) + " precision.\nSquare sum equals " + str(square_sum))
 
 def print_matrix_method(matrix):
     for row in matrix:
@@ -18,8 +16,7 @@ def print_matrix_method(matrix):
 
 def change_quaternion_to_rotation_matrix(quaternion, print_matrix):
     if len(quaternion) != 4:
-        print("\nInvalid quaternion length. Quaternion consists of 4 elements, " + str(len(quaternion)) + " given for quaternion " + str(quaternion) + ".")
-        sys.exit()
+        raise Exception("\nInvalid quaternion length. Quaternion consists of 4 elements, " + str(len(quaternion)) + " given for quaternion " + str(quaternion) + ".")
     q0 = quaternion[0]
     q1 = quaternion[1]
     q2 = quaternion[2]
@@ -47,8 +44,7 @@ def change_quaternion_to_rotation_matrix(quaternion, print_matrix):
 
 def change_angle_matrix_to_rotation_matrix(angle_matrix, print_matrix):
     if len(angle_matrix) != 3:
-        print("\nInvalid angle matrix length. Angle matrix consists of 3 elements, " + str(len(angle_matrix)) + " given for angle matrix " + str(angle_matrix) + ".")
-        sys.exit()
+        raise Exception("\nInvalid angle matrix length. Angle matrix consists of 3 elements, " + str(len(angle_matrix)) + " given for angle matrix " + str(angle_matrix) + ".")
     alpha = math.radians(angle_matrix[0])
     beta  = math.radians(angle_matrix[1])
     gamma = math.radians(angle_matrix[2])
@@ -74,16 +70,13 @@ def multiply_two_2D_matices(matrix_1, matrix_2, print_product):
     numpy_matrix_1 = numpy.array(matrix_1)
     numpy_matrix_2 = numpy.array(matrix_2)
     if numpy_matrix_1.dtype.char == "O":
-        print("\nInput 1 is not a matrix. Wrong sizes of rows or columns.")
-        sys.exit()
+        raise Exception("\nInput 1 is not a matrix. Wrong sizes of rows or columns.")
     if numpy_matrix_2.dtype.char == "O":
-        print("\nInput 2 is not a matrix. Wrong sizes of rows or columns.")
-        sys.exit()
+        raise Exception("\nInput 2 is not a matrix. Wrong sizes of rows or columns.")
     try:
         product_matrix = numpy.matmul(numpy_matrix_1, numpy_matrix_2)
     except ValueError as e:
-        print("\n" + str(e))
-        sys.exit()
+        raise Exception("\n" + str(e))
     if print_product:
         print("\nProduct of two given matrices:")
         print(product_matrix)
@@ -91,14 +84,13 @@ def multiply_two_2D_matices(matrix_1, matrix_2, print_product):
 
 def change_rotation_matrix_to_quaternion(rotation_matrix, print_quaternion):
     if len(rotation_matrix) != 3:
-        print("\nInvalid rotation matrix row number. Rotation matrix consists of 3 rows and 3 columns, " + str(len(rotation_matrix)) + " rows given for rotation matrix:")
+        print("\nExeption: Invalid rotation matrix row number. Rotation matrix consists of 3 rows and 3 columns, " + str(len(rotation_matrix)) + " rows given for rotation matrix:")
         print_matrix_method(rotation_matrix)
         sys.exit()
     else:
         for row_number, row in enumerate(rotation_matrix):
             if (len(row) != 3):
-                print("\nInvalid rotation matrix size in row " + str(row_number + 1) + ". Rotation matrix consists of 3 rows and 3 columns, but size " + str(len(row)) + " given.")
-                sys.exit()
+                raise Exception("\nInvalid rotation matrix size in row " + str(row_number + 1) + ". Rotation matrix consists of 3 rows and 3 columns, but size " + str(len(row)) + " given.")
     r11 = round(rotation_matrix[0][0], 15)
     r12 = round(rotation_matrix[0][1], 15)
     r13 = round(rotation_matrix[0][2], 15)
