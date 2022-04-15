@@ -4,7 +4,7 @@
 Script allows you to rotate a quaternion by XYZ Euler (so rotation about local target axes) angles and produces new quaternion.
 
 # Built With
-Python 3.8.0
+Python 3.9.10
 
 # Getting started
 ### Requirements
